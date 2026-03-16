@@ -222,7 +222,7 @@ const cats=[
 ];
 
 let cur=0,sel=[[null,null,null],[null,null,null],[null,null,null]],selPkg=[null,null,null];
-let hiddenRows=new Set(); // indici delle righe nascoste
+let hiddenRows=new Set();
 
 function startEdit(){
 const d=document.getElementById(‘title-display’),i=document.getElementById(‘title-input’);
@@ -241,9 +241,14 @@ buildCriteria();computeResult();
 }
 
 function buildCriteria(){
-document.getElementById(‘criteria-wrap’).innerHTML=cats[cur].criteria.map((c,ci)=>` <div> <div class="crit-label">${c.label}</div> <div class="pills">${c.pills.map((p,pi)=>`
-<button class="pill ${sel[cur][ci]===pi?'active':''}" onclick="pick(${ci},${pi})">${p.t}</button>
-`).join('')}</div> </div>`).join(’’);
+document.getElementById(‘criteria-wrap’).innerHTML=cats[cur].criteria.map((c,ci)=>`
+
+  <div>
+    <div class="crit-label">${c.label}</div>
+    <div class="pills">${c.pills.map((p,pi)=>`
+      <button class="pill ${sel[cur][ci]===pi?'active':''}" onclick="pick(${ci},${pi})">${p.t}</button>
+    `).join('')}</div>
+  </div>`).join('');
 }
 
 function pick(ci,pi){sel[cur][ci]=sel[cur][ci]===pi?null:pi;buildCriteria();computeResult();}
@@ -289,10 +294,10 @@ document.querySelectorAll(’.sum-row’).forEach((r,i)=>r.classList.toggle(‘h
 
 function buildSumRow(k,v,idx){
 return`<div class="sum-row ${hiddenRows.has(idx)?'hidden-row':''}" onclick="toggleRow(${idx})">
+
 <div class="sum-kv"><span class="k">${k}</span><span class="v">${v}</span></div>
 <div class="hide-dot"></div>
-
-  </div>`;
+</div>`;
 }
 
 function generateSummary(){
@@ -321,7 +326,6 @@ sm.classList.add(‘visible’);sm.scrollIntoView({behavior:‘smooth’});
 
 function shareOrPrint(){
 if(navigator.share){
-// Costruisci testo solo dalle righe visibili
 const rows=document.querySelectorAll(’.sum-row:not(.hidden-row)’);
 let text=document.getElementById(‘title-display’).textContent+’\n\n’;
 rows.forEach(r=>{
